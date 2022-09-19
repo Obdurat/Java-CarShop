@@ -3,7 +3,6 @@ package com.obdurat.carshop.services;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +22,11 @@ public class CarService implements IService<CarEntity> {
     }
 
     @Override
-    public void delete(String id) {
-        this.repository.deleteById(id);        
+    public Boolean delete(String id) {
+        Optional<CarEntity> result = this.repository.findById(id);
+        if (!result.isPresent()) { return false; }
+        this.repository.delete(result.get());
+        return true;
     }
 
     @Override
@@ -36,19 +38,16 @@ public class CarService implements IService<CarEntity> {
     @Override
     public CarEntity findOne(String id) {
         Optional<CarEntity> result = this.repository.findById(id);
-        var output = new CarEntity();
-        BeanUtils.copyProperties(result, output);
-        return output;
+        return result.get();
     }
 
     @Override
     public CarEntity update(String id, CarEntity request) {
         Optional<CarEntity> result = this.repository.findById(id);
         if (!result.isPresent()) { return null; };
-        var updated = new CarEntity();
-        BeanUtils.copyProperties(request, updated);
+        CarEntity updated = request;        
         updated.setId(id);
         this.repository.save(updated);
-        return updated;        
+        return updated;
   }
 }

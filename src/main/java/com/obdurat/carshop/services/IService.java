@@ -7,5 +7,5 @@ public interface IService<T> {
     List<T> findAll();
     T findOne(String id);
     T update(String id, T request);
-    void delete(String id);
+    Boolean delete(String id);
 }
