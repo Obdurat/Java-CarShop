@@ -1,35 +1,43 @@
 package com.obdurat.carshop.models;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import com.mongodb.lang.NonNull;
 
 @Document
 public class CarEntity {    
      
     @Id
+    @Pattern(regexp = "^([a-zA-Z0-9]){24}")
     private String _id;
 
-    @NonNull
+    @NotBlank
+    @Pattern(regexp = "[a-zA-Z0-9]*")
     private String _model;
 
-    @NonNull
+    @Min(1990)
+    @Max(2022)
     private int _year;
-
-    @NonNull
+    
+    @NotBlank
     private String _color;
-
-    @NonNull
+    
+    @DecimalMin("1000")
     private float _buyValue;
-
-    @NonNull
+    
     private Boolean _status;
 
-    @NonNull
+    @Min(2)
+    @Max(4)
     private int _doorsQty;
     
-    @NonNull
+    @Min(2)
+    @Max(7)
     private int _seatsQty;
 
     public String getId() {
