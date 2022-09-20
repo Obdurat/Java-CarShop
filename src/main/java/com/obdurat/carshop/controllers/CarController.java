@@ -3,7 +3,6 @@ package com.obdurat.carshop.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,7 +41,6 @@ public class CarController {
     
     @GetMapping(path = "/{id}")
     public ResponseEntity<Response<CarEntity>> findById(@PathVariable String id) {
-        System.out.println(id);
         CarEntity result = this.service.findOne(id);
         Response<CarEntity> response = new Response<CarEntity>(result);
         return ResponseEntity.ok(response);
@@ -56,10 +54,9 @@ public class CarController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity.BodyBuilder delete(@PathVariable String id) {
+    public ResponseEntity<Response<String>> delete(@PathVariable String id) {
         Boolean request = this.service.delete(id);
-        if (!request) { return ResponseEntity.status(HttpStatus.NOT_FOUND); };
-        return ResponseEntity.status(HttpStatus.ACCEPTED);
+        if (!request) { return ResponseEntity.status(404).body(new Response<String>("Entity not found")); };
+        return ResponseEntity.accepted().body(new Response<String>("Entity Deleted Suscessfully"));
     }
 }
-
